@@ -43,6 +43,17 @@ end RO_PUF;
 
 architecture Behavioral of RO_PUF is
 
+    component RO_PUF_Internal is
+        Port ( 
+            CLK     : in STD_LOGIC;
+            RST     : in STD_LOGIC;
+            EN      : in STD_LOGIC;
+            Chal    : in STD_LOGIC_VECTOR(7 downto 0);
+            Q       : out STD_LOGIC_VECTOR(7 downto 0);
+            DONE    : out STD_LOGIC
+            );
+    end component;
+
     component sseg_des is
         Port (        COUNT : in std_logic_vector(15 downto 0); 				  
                         CLK : in std_logic;
@@ -56,16 +67,23 @@ architecture Behavioral of RO_PUF is
 
 begin
 
+    my_RO: RO_PUF_Internal 
+	port map (CLK  => CLK,
+	          RST  => BTNC,
+	          EN   => '1',
+	          Chal => SWITCHES,
+	          Q    => response,
+	          DONE => LEDS(9));
+
     my_sseg: sseg_des 
 	port map (COUNT    => sseg_cnt,
 	          CLK      => CLK,
 	          VALID    => '1',
 	          DISP_EN  => DISP_EN,
 	          SEGMENTS => SEGMENTS); 
-	          
-    response <= "10100001";  
+	            
     sseg_cnt <= SWITCHES&response;   
     LEDS(7 downto 0) <= response; 
     LEDS(8) <= BTNC;
-    LEDS(9) <= BTNC;
+    --LEDS(9) <= BTNC;
 end Behavioral;

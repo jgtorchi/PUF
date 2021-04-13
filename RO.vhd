@@ -39,9 +39,6 @@ entity RO is
 end RO;
 
 architecture Behavioral of RO is
-    signal B        : std_logic_vector (2 downto 0);
-    signal Blatched : std_logic_vector (2 downto 0);
-    
     component ROslice is
     Port ( Sel      : in STD_LOGIC;
            En       : in STD_LOGIC;
@@ -51,6 +48,17 @@ architecture Behavioral of RO is
            B         : out STD_LOGIC;
            Blatched  : out STD_LOGIC);
     end component;
+
+    attribute KEEP : string;
+    attribute S    : string;
+    
+    signal B        : std_logic_vector (2 downto 0);
+    signal Blatched : std_logic_vector (2 downto 0);
+    
+    attribute KEEP of B        : signal is "True";
+    attribute S    of B        : signal is "True";
+    attribute KEEP of Blatched : signal is "True";
+    attribute S    of Blatched : signal is "True";
 begin
     Q <= B(0);
 
