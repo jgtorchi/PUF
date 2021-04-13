@@ -42,6 +42,9 @@ entity ROslice is
 end ROslice;
 
 architecture Behavioral of ROslice is
+    attribute KEEP : string;
+    attribute S    : string;
+
     signal notA        : std_logic;
     signal notAlatched : std_logic;
     signal selG        : std_logic; --slice G signal after first mux
@@ -50,6 +53,23 @@ architecture Behavioral of ROslice is
     signal enF         : std_logic;
     signal preB        : std_logic;
     signal latchEn     : std_logic;
+    
+    attribute KEEP of notA        : signal is "True";
+    attribute S    of notA        : signal is "True";
+    attribute KEEP of notAlatched : signal is "True";
+    attribute S    of notAlatched : signal is "True";
+    attribute KEEP of selG        : signal is "True";
+    attribute S    of selG        : signal is "True";
+    attribute KEEP of selF        : signal is "True";
+    attribute S    of selF        : signal is "True";
+    attribute KEEP of enG         : signal is "True";
+    attribute S    of enG         : signal is "True";
+    attribute KEEP of enF         : signal is "True";
+    attribute S    of enF         : signal is "True";
+    attribute KEEP of preB        : signal is "True";
+    attribute S    of preB        : signal is "True";
+    attribute KEEP of latchEn     : signal is "True";
+    attribute S    of latchEn     : signal is "True";
 begin
     notA        <= NOT A;
     notAlatched <= Alatched;
