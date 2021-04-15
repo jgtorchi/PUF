@@ -292,3 +292,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports BTNC]
 #set_property IOSTANDARD LVCMOS33 [get_ports {QspiDB[3]}]
 #set_property PACKAGE_PIN K19 [get_ports QspiCSn]
 #set_property IOSTANDARD LVCMOS33 [get_ports QspiCSn]
+
+set_property ALLOW_COMBINATORIAL_LOOPS true [get_nets {my_RO/RO_0/RO0/notA}]
+set_property ALLOW_COMBINATORIAL_LOOPS true [get_nets {my_RO/RO_1/RO0/notA}]
+set_property ALLOW_COMBINATORIAL_LOOPS true [get_nets {my_RO/RO_2/RO0/notA}]
+set_property ALLOW_COMBINATORIAL_LOOPS true [get_nets {my_RO/RO_3/RO0/notA}]

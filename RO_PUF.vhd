@@ -64,11 +64,19 @@ architecture Behavioral of RO_PUF is
     
     signal response : std_logic_vector(7 downto 0);
     signal sseg_cnt : std_logic_vector(15 downto 0);
+    signal div_clk  : std_logic;
 
 begin
 
+    div_clk_50MHZ: process(CLK)
+    begin
+      if(rising_edge(CLK)) then
+        div_clk   <= not CLK;
+      end if;
+    end process div_clk_50MHZ;
+    
     my_RO: RO_PUF_Internal 
-	port map (CLK  => CLK,
+	port map (CLK  => div_clk,
 	          RST  => BTNC,
 	          EN   => '1',
 	          Chal => SWITCHES,
