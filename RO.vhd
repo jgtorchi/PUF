@@ -52,8 +52,8 @@ architecture Behavioral of RO is
     attribute KEEP : string;
     attribute S    : string;
     
-    signal B        : std_logic_vector (2 downto 0);
-    signal Blatched : std_logic_vector (2 downto 0);
+    signal B        : std_logic_vector (2 downto 0) := "000";
+    signal Blatched : std_logic_vector (2 downto 0) := "000";
     
     attribute KEEP of B        : signal is "True";
     attribute S    of B        : signal is "True";

@@ -37,22 +37,22 @@ entity ROslice is
            Bx       : in STD_LOGIC;
            A        : in STD_LOGIC;
            Alatched : in STD_LOGIC;
-           B         : out STD_LOGIC;
-           Blatched  : out STD_LOGIC);
+           B         : out STD_LOGIC := '0';
+           Blatched  : out STD_LOGIC := '0');
 end ROslice;
 
 architecture Behavioral of ROslice is
     attribute KEEP : string;
     attribute S    : string;
 
-    signal notA        : std_logic;
-    signal notAlatched : std_logic;
-    signal selG        : std_logic; --slice G signal after first mux
-    signal selF        : std_logic; --slice F signal after first mux
-    signal enG         : std_logic;
-    signal enF         : std_logic;
-    signal preB        : std_logic;
-    signal latchEn     : std_logic;
+    signal notA        : std_logic := '0';
+    signal notAlatched : std_logic := '0';
+    signal selG        : std_logic := '0'; --slice G signal after first mux
+    signal selF        : std_logic := '0'; --slice F signal after first mux
+    signal enG         : std_logic := '0';
+    signal enF         : std_logic := '0';
+    signal preB        : std_logic := '0';
+    signal latchEn     : std_logic := '0';
     
     attribute KEEP of notA        : signal is "True";
     attribute S    of notA        : signal is "True";
@@ -72,7 +72,8 @@ architecture Behavioral of ROslice is
     attribute S    of latchEn     : signal is "True";
 begin
     notA        <= NOT A;
-    notAlatched <= Alatched;
+    -- Changed: Added not infront of Alatched
+    notAlatched <= NOT Alatched;
     
     with Sel select
         selG <= notA when '1',
@@ -94,13 +95,13 @@ begin
         preB <= selF when '1',
         selG when others;
         
-    B <= preB;
+    B <= preB after 2 ns;
     
     latchEn <= '1';
     latch : PROCESS (latchEn, preB)
     BEGIN
         IF (latchEn = '1') THEN
-            Blatched <= preB;
+            Blatched <= preB after 3 ns;
         END IF;
     END PROCESS latch;    
 end Behavioral;

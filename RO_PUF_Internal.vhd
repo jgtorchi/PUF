@@ -54,20 +54,21 @@ architecture Behavioral of RO_PUF_Internal is
          );
     end component;
     
-    signal chal_sel : std_logic_vector(2 downto 0);
-    signal chal_bx  : std_logic_vector(2 downto 0);
-    signal chal_mux : std_logic_vector(1 downto 0);
+    constant MAX_VALUE : std_logic_vector(7 downto 0) := "11111111";
+    
+    signal chal_sel : std_logic_vector(2 downto 0) := "000";
+    signal chal_bx  : std_logic_vector(2 downto 0) := "000";
+    signal chal_mux : std_logic_vector(1 downto 0) := "00";
 
-    signal RO_Q : std_logic_vector(3 downto 0);
+    signal RO_Q : std_logic_vector(3 downto 0) := "0000";
     
-    signal RO_MUX_Q : std_logic;
+    signal RO_MUX_Q : std_logic := '0';
     
-    signal RO_Counter_Q : std_logic_vector(7 downto 0);
-    signal Std_Counter_Q : std_logic_vector(7 downto 0);
+    signal RO_Counter_Q : std_logic_vector(7 downto 0) := "00000000";
+    signal Std_Counter_Q : std_logic_vector(7 downto 0) := "00000000";
     
-    signal EN_Internal : std_logic;
+    signal EN_Internal : std_logic := '0';
     
-    signal MAX_VALUE : std_logic_vector(7 downto 0) := (others => '1');
 begin
     chal_sel <= Chal(2 downto 0);
     chal_bx <= Chal(5 downto 3);
@@ -132,10 +133,10 @@ begin
             if EN_Internal = '1' then
                 Std_Counter_Q <= Std_Counter_Q + 1;
             end if;
-        end if; 
+        end if;
     end process;
     
-    EN_Internal_process : process (Std_Counter_Q, EN, MAX_VALUE)
+    EN_Internal_process : process (Std_Counter_Q, EN)
     begin
         if (Std_Counter_Q /= MAX_VALUE) and (EN = '1')then
             EN_Internal <= '1';
