@@ -62,16 +62,16 @@ architecture Behavioral of RO_PUF is
                    SEGMENTS : out std_logic_vector(6 downto 0)); -- Decimal Point is never used
     end component;
     
-    signal response : std_logic_vector(7 downto 0);
-    signal sseg_cnt : std_logic_vector(15 downto 0);
-    signal div_clk  : std_logic;
+    signal response : std_logic_vector(7 downto 0) := "00000000";
+    signal sseg_cnt : std_logic_vector(15 downto 0) := "0000000000000000";
+    signal div_clk  : std_logic := '0';
 
 begin
 
     div_clk_50MHZ: process(CLK)
     begin
       if(rising_edge(CLK)) then
-        div_clk   <= not CLK;
+        div_clk   <= not div_clk;
       end if;
     end process div_clk_50MHZ;
     

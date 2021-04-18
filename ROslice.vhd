@@ -80,7 +80,8 @@ begin
         notAlatched when others;
     
     with Sel select
-        selG <= notA when '1',
+        --CHANGED
+        selF <= notA when '1',
         notAlatched when others;
 
     with En select

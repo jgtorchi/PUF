@@ -81,9 +81,11 @@ begin
 	          Blatched => Blatched(1));
 
     RO2: ROslice
-	port map (Sel      => Sel(0),
+    -- CHANGED
+	port map (Sel      => Sel(2),
 	          En       => En,
-	          Bx       => Bx(0),
+	          --CHANGED 
+	          Bx       => Bx(2),
 	          A        => B(1),
 	          Alatched => Blatched(1),
 	          B        => B(2),
