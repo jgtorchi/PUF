@@ -71,9 +71,9 @@ architecture Behavioral of ROslice is
     attribute KEEP of latchEn     : signal is "True";
     attribute S    of latchEn     : signal is "True";
 begin
-    notA        <= NOT A;
+    notA        <= NOT A after 1ns;
     -- Changed: Added not infront of Alatched
-    notAlatched <= NOT Alatched;
+    notAlatched <= NOT Alatched after 2ns;
     
     with Sel select
         selG <= notA when '1',
@@ -81,20 +81,20 @@ begin
     
     with Sel select
         --CHANGED
-        selF <= notA when '1',
-        notAlatched when others;
+        selF <= notA after 1 ns when '1',
+        notAlatched after 2 ns when others;
 
     with En select
-        enG <= selG when '1',
-        '0' when others;   
+        enG <= selG after 3 ns when '1',
+        '0' after 4 ns when others;   
         
     with En select
-        enF <= selF when '1',
+        enF <= selF after 5 ns when '1',
         '0' when others;     
     
     with Bx select
-        preB <= selF when '1',
-        selG when others;
+        preB <= selF after 2 ns when '1',
+        selG after 1 ns when others;
         
     B <= preB after 2 ns;
     
