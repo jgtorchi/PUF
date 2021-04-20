@@ -16,7 +16,7 @@ architecture Behavioral of RO_PUF_test is
             CLK      : in STD_LOGIC;
             BTNC     : in STD_LOGIC;
             SWITCHES : in STD_LOGIC_VECTOR (7 downto 0);
-            LEDS      : out STD_LOGIC_VECTOR (9 downto 0);
+            LEDS      : out STD_LOGIC_VECTOR (8 downto 0);
             DISP_EN   : out STD_LOGIC_VECTOR (3 downto 0);
             SEGMENTS  : out STD_LOGIC_VECTOR (6 downto 0));
     end component;
@@ -25,7 +25,7 @@ architecture Behavioral of RO_PUF_test is
 	signal CLK     : std_logic := '0';
 	signal btnc     : std_logic := '0';
 	signal switches      : std_logic_vector(7 downto 0) := "00011000";
-	signal leds    : std_logic_vector(9 downto 0) := "0000000000";
+	signal leds    : std_logic_vector(8 downto 0) := "000000000";
     signal disp_en       : std_logic_vector(3 downto 0) := "0000";
     signal segments    : std_logic_vector(6 downto 0) := "0000000";
 	constant CLK_period    : time := 20 ns;
