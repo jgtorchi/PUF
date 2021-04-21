@@ -81,7 +81,7 @@ begin
 	          EN   => '1',
 	          Chal => SWITCHES,
 	          Q    => response,
-	          DONE => LEDS(9));
+	          DONE => LEDS(8));
 
     my_sseg: sseg_des 
 	port map (COUNT    => sseg_cnt,
@@ -92,6 +92,5 @@ begin
 	            
     sseg_cnt <= SWITCHES&response;   
     LEDS(7 downto 0) <= response; 
-    LEDS(8) <= BTNC;
-    --LEDS(9) <= BTNC;
+    --LEDS(9) <= ;  -- hash is done signal
 end Behavioral;

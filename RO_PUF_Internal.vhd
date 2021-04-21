@@ -32,6 +32,7 @@ entity RO_PUF_Internal is
         EN      : in STD_LOGIC;
         Chal    : in STD_LOGIC_VECTOR(7 downto 0);
         Q       : out STD_LOGIC_VECTOR(7 downto 0);
+        CNT     : out std_logic_vector(7 downto 0);
         DONE    : out STD_LOGIC
         );
 end RO_PUF_Internal;
@@ -60,14 +61,17 @@ architecture Behavioral of RO_PUF_Internal is
     signal chal_bx  : std_logic_vector(2 downto 0) := "000";
     signal chal_mux : std_logic_vector(1 downto 0) := "00";
 
-    signal RO_Q : std_logic_vector(3 downto 0) := "0000";
-    
+    signal RO_Q     : std_logic_vector(3 downto 0) := "0000";    
     signal RO_MUX_Q : std_logic := '0';
     
-    signal RO_Counter_Q : std_logic_vector(7 downto 0) := "00000000";
+    signal RO_Counter_Q  : std_logic_vector(7 downto 0) := "00000000";
     signal Std_Counter_Q : std_logic_vector(7 downto 0) := "00000000";
-    
-    signal EN_Internal : std_logic := '0';
+ 
+    signal EN_Internal : std_logic := '0';    
+    signal pre_DONE    : std_logic := '0';    
+    signal xorChal     : std_logic := '0';
+    signal intRst      : std_logic := '0';
+    signal delChal     : std_logic_vector(7 downto 0) := (others=>'0');
     
 begin
     chal_sel <= Chal(2 downto 0);
@@ -76,7 +80,9 @@ begin
     
     Q <= RO_Counter_Q;
     
-    DONE <= '1' when Std_Counter_Q = MAX_VALUE else '0';
+    pre_DONE <= '1' when Std_Counter_Q >= MAX_VALUE else '0';
+    DONE <= pre_DONE;
+    CNT <= Std_Counter_Q;
 
     RO_0: RO 
 	port map (Sel  => chal_sel,
@@ -114,9 +120,18 @@ begin
         end case; 
     end process;
     
-    RO_Counter : process (RO_MUX_Q, EN_Internal, RST)
+    delayed_challenge : process(CLK)
     begin
-        if RST = '1' then
+        if (rising_edge(CLK)) then
+            delChal <= chal;
+        end if;
+    end process;
+    
+    intRst <= '0' when delChal = chal else '1';
+    
+    RO_Counter : process (RO_MUX_Q, EN_Internal, RST, Chal)
+    begin
+        if (RST = '1') OR (intRst = '1')then
             RO_Counter_Q <= (others => '0');
         elsif rising_edge(RO_MUX_Q) then
             if EN_Internal = '1' then
@@ -125,9 +140,9 @@ begin
         end if; 
     end process;
     
-    Std_Counter : process (CLK, EN_Internal, RST)
+    Std_Counter : process (CLK, EN_Internal, RST, Chal)
     begin
-        if RST = '1' then
+        if (RST = '1') OR (intRst = '1') then
             Std_Counter_Q <= (others => '0');
         elsif rising_edge(CLK) then
             if EN_Internal = '1' then
@@ -136,9 +151,9 @@ begin
         end if;
     end process;
     
-    EN_Internal_process : process (Std_Counter_Q, EN)
+    EN_Internal_process : process (Std_Counter_Q, EN, pre_done)
     begin
-        if (Std_Counter_Q /= MAX_VALUE) and (EN = '1')then
+        if (pre_DONE = '0') and (EN = '1')then
             EN_Internal <= '1';
         else
             EN_Internal <= '0';
