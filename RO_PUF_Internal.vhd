@@ -32,7 +32,7 @@ entity RO_PUF_Internal is
         EN      : in STD_LOGIC;
         Chal    : in STD_LOGIC_VECTOR(7 downto 0);
         Q       : out STD_LOGIC_VECTOR(7 downto 0);
-        CNT     : out std_logic_vector(7 downto 0);
+        --CNT     : out std_logic_vector(7 downto 0);
         DONE    : out STD_LOGIC
         );
 end RO_PUF_Internal;
@@ -55,18 +55,18 @@ architecture Behavioral of RO_PUF_Internal is
          );
     end component;
     
-    constant MAX_VALUE : std_logic_vector(7 downto 0) := "11111111";
+    constant MAX_VALUE : std_logic_vector(19 downto 0) := (others=>'1');
     
-    signal chal_sel : std_logic_vector(2 downto 0) := "000";
-    signal chal_bx  : std_logic_vector(2 downto 0) := "000";
-    signal chal_mux : std_logic_vector(1 downto 0) := "00";
+    signal chal_sel    : std_logic_vector(2 downto 0) := "000";
+    signal chal_bx     : std_logic_vector(2 downto 0) := "000";
+    signal chal_mux    : std_logic_vector(1 downto 0) := "00";
 
-    signal RO_Q     : std_logic_vector(3 downto 0) := "0000";    
-    signal RO_MUX_Q : std_logic := '0';
+    signal RO_Q        : std_logic_vector(3 downto 0) := "0000";    
+    signal RO_MUX_Q    : std_logic := '0';
     
-    signal RO_Counter_Q  : std_logic_vector(7 downto 0) := "00000000";
-    signal Std_Counter_Q : std_logic_vector(7 downto 0) := "00000000";
- 
+    signal RO_Counter_Q  : std_logic_vector(19 downto 0) := (others=>'0');
+    signal Std_Counter_Q : std_logic_vector(19 downto 0) := (others=>'0');
+
     signal EN_Internal : std_logic := '0';    
     signal pre_DONE    : std_logic := '0';    
     signal xorChal     : std_logic := '0';
@@ -78,11 +78,11 @@ begin
     chal_bx <= Chal(5 downto 3);
     chal_mux <= Chal(7 downto 6);
     
-    Q <= RO_Counter_Q;
+    Q <= RO_Counter_Q(19 downto 12);
     
     pre_DONE <= '1' when Std_Counter_Q >= MAX_VALUE else '0';
     DONE <= pre_DONE;
-    CNT <= Std_Counter_Q;
+    --CNT <= Std_Counter_Q;
 
     RO_0: RO 
 	port map (Sel  => chal_sel,
