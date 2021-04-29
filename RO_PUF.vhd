@@ -151,17 +151,17 @@ begin
 	LEDS(7 downto 0) <= RO_PUF_Internal_Q;
 	LEDS(13 downto 8) <= "000000";
 	LEDS(14) <= RO_PUF_Internal_done;
-	LEDS(15) <= sha128_simple_READY;
+	LEDS(15) <= (sha128_simple_READY AND RO_PUF_Internal_done);
 	
 	sseg_cnt_driver: process(RO_PUF_Internal_Q, sha128_simple_DATA_OUT, SWITCHES)
 	begin
 	   if SWITCHES(15 downto 12) = "0000" then
 	       sseg_cnt <= SWITCHES_buffer & RO_PUF_Internal_Q;
 	   else
-	       if SWITCHES(15 downto 12) >= "1000" then
+	       if SWITCHES(15 downto 12) > "1000" then
 	           sseg_cnt <= "0000000000000000";
 	       else
-	           sseg_cnt <= sha128_simple_DATA_OUT(to_integer(unsigned(SWITCHES(15 downto 12))) * 2 * 8 downto to_integer(unsigned(SWITCHES(15 downto 12))) * 2 * 8 - 15);
+	           sseg_cnt <= sha128_simple_DATA_OUT(to_integer(unsigned(SWITCHES(15 downto 12))) * 2 * 8 - 1 downto to_integer(unsigned(SWITCHES(15 downto 12))) * 2 * 8 - 16);
 	       end if;
 	   end if;
 	
